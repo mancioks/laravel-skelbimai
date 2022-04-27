@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">Naujausi skebimai</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,7 +14,20 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <div class="row">
+                        @foreach($ads as $ad)
+                            <div class="col-4">
+                                <div class="card">
+                                    <img class="card-img-top" src="{{ $ad->image }}" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $ad->title }}</h5>
+                                        <p class="card-text">{{ $ad->content }}</p>
+                                        <a href="{{ route('ad.show', $ad->id) }}" class="btn btn-primary">Rodyti</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>

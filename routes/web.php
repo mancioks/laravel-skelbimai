@@ -15,11 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing');
 });
 
-Route::resource('test', 'App\Http\Controllers\TestController');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'landing'])->name('homepage');
+Route::get('/profile/ads', [App\Http\Controllers\UserPanelController::class, 'myAds'])->name('profile.ads');
+
+Route::resource('/comment', 'App\Http\Controllers\CommentController');
 
 Auth::routes();
-
+Route::resource('/ad', 'App\Http\Controllers\AdController');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/ajax/models/{id}', [\App\Http\Controllers\Ajax\Models::class, 'getByManufacturerId'])->name('ajax.models');
