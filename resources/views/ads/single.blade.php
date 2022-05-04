@@ -8,9 +8,6 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-11"><h1>{{ $ad->title }}</h1></div>
-                            <div class="col-1">
-                                <a href="{{ route('ad.edit', $ad->id) }}">Edit</a>
-                            </div>
                         </div>
                     </div>
 
@@ -44,6 +41,7 @@
                             <ul>
                                 <li>{{ $ad->user->name }}</li>
                                 <li>{{ $ad->user->email }}</li>
+                                <li><a href="{{ route('messages.create-conversation', $ad->user->id) }}">Message seller</a></li>
                             </ul>
                         </div>
                     </div>
@@ -71,7 +69,7 @@
             </div>
             <div class="col-8 pt-1">
                 <div class="list-group">
-                    @foreach($ad->comments as $comment)
+                    @foreach($comments as $comment)
                         <div class="list-group-item flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1">{{ $comment->user->name }}</h5>
@@ -80,6 +78,9 @@
                             <p class="mb-1">{{ $comment->content }}</p>
                         </div>
                     @endforeach
+                </div>
+                <div class="ads-pagination">
+                    {!! $comments->links('pagination::bootstrap-5') !!}
                 </div>
             </div>
         </div>

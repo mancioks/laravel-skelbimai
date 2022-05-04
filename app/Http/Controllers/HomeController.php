@@ -30,6 +30,16 @@ class HomeController extends Controller
 
     public function landing()
     {
-        return view('landing');
+        $data["new_ads"] = Ad::where('active', 1)
+                            ->orderByDesc('id')
+                            ->take(4)
+                            ->get();
+
+        $data["popular_ads"] = Ad::where('active', 1)
+                                ->orderByDesc('views')
+                                ->take(4)
+                                ->get();
+
+        return view('landing', $data);
     }
 }

@@ -9,6 +9,7 @@ use App\Models\Manufacturer;
 use App\Models\Model;
 use App\Models\Type;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
@@ -22,9 +23,19 @@ class AdController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['ads'] = Ad::all();
+        if($request->get('manufacturer')) {
+            $manufacturerId = $request->get('manufacturer');
+            $ads = Ad::where('manufacturer_id', $manufacturerId)->paginate(42)->withQueryString();
+        } else {
+            $ads = Ad::paginate(42)->withQueryString();
+        }
+
+        $data['ads'] = $ads;
+        $data['request'] = $request;
+
+        $data['manufacturers'] = Manufacturer::all();
         return view('ads.list', $data);
     }
 
@@ -88,6 +99,7 @@ class AdController extends Controller
         $data['ad'] = $ad;
         $ad->views = $ad->views + 1;
         $ad->save();
+        $data['comments'] = $ad->comments()->orderByDesc('id')->paginate(5);
         return view('ads.single', $data);
     }
 
@@ -143,6 +155,7 @@ class AdController extends Controller
      */
     public function destroy(Ad $ad)
     {
-        //
+        $ad->delete();
+        return redirect()->back();
     }
 }

@@ -58,16 +58,31 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
+                                    @if($unread > 0)
+                                        <span class="position-absolute top-10 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                            <span class="visually-hidden">New alerts</span>
+                                        </span>
+                                    @endif
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a href="{{ route('messages.inbox') }}" class="dropdown-item position-relative">
+                                        Messages
+                                        <span class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{ $unread }}
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                    </a>
                                     <a href="{{ route('profile.ads') }}" class="dropdown-item">
                                         My ads
                                     </a>
                                     <a href="{{ route('ad.create') }}" class="dropdown-item">
                                         Add new ad
+                                    </a>
+                                    <a href="{{ route('profile') }}" class="dropdown-item">
+                                        My profile
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

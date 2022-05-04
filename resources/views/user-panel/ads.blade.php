@@ -20,7 +20,19 @@
                         <td>{{ $ad->title }}</td>
                         <td>{{ $ad->views }}</td>
                         <td>{{ $ad->active }}</td>
-                        <td><a href="{{ route('ad.edit', $ad->id) }}">Edit</a></td>
+                        <td>
+                            <a href="{{ route('ad.edit', $ad->id) }}">Edit</a>
+                            <a href="{{ route('ad.destroy', $ad->id) }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('destroy-{{ $ad->id }}').submit();">
+                                {{ __('Delete') }}
+                            </a>
+
+                            <form id="destroy-{{ $ad->id }}" action="{{ route('ad.destroy', $ad->id) }}" method="POST" class="d-none">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
