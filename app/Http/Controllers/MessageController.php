@@ -18,7 +18,7 @@ class MessageController extends Controller
     }
     public function inbox()
     {
-        $conversations = Conversation::where('sender_id', Auth::id())->orWhere('receiver_id', Auth::id())->orderByDesc('id')->get();
+        $conversations = Conversation::where('sender_id', Auth::id())->orWhere('receiver_id', Auth::id())->orderByDesc('updated_at')->get();
         return view('messages.inbox', compact('conversations'));
     }
 
@@ -53,7 +53,11 @@ class MessageController extends Controller
 
     public function storeMessage($conversation_id, StoreMessageRequest $request)
     {
-        Conversation::findOrFail($conversation_id);
+        $conversation = Conversation::findOrFail($conversation_id);
+
+        //update conversation timestamp updatet_ad to order at top
+        $conversation->updated_at = \Carbon\Carbon::now()->toDateTimeString();
+        $conversation->save();
 
         $message = new Message();
         $message->sender_id = Auth::id();
@@ -76,6 +80,13 @@ class MessageController extends Controller
             $unreadMessage->save();
         }
 
-        return view('messages.conversation', compact('conversation'));
+        $lastMessage = $conversation->messages->last();
+        if($lastMessage->read == true) {
+            $seen = "Seen " . $lastMessage->updated_at;
+        } else {
+            $seen = "Not seen";
+        }
+
+        return view('messages.conversation', compact('conversation', 'seen'));
     }
 }

@@ -75,6 +75,9 @@
                                             <span class="visually-hidden">unread messages</span>
                                         </span>
                                     </a>
+                                    <a href="{{ route('profile.memorised') }}" class="dropdown-item">
+                                        Favorite ads
+                                    </a>
                                     <a href="{{ route('profile.ads') }}" class="dropdown-item">
                                         My ads
                                     </a>

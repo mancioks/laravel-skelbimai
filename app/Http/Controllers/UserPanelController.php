@@ -43,4 +43,12 @@ class UserPanelController extends Controller
         $user = Auth::user();
         return view('user-panel.profile', ['user' => $user]);
     }
+
+    public function memorised()
+    {
+        $user = Auth::user();
+        $memorised = $user->memorisedAds;
+
+        return view('user-panel.memorised', compact('memorised'));
+    }
 }

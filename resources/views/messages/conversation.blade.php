@@ -10,7 +10,7 @@
 
                         <div class="list-group d-block">
                             @foreach($conversation->messages as $message)
-                                <div class="list-group-item w-75 d-inline-block mb-2 border-1 rounded-3 @if($message->user->id == auth()->id()) float-end bg-info @endif;">
+                                <div class="list-group-item w-75 d-inline-block mb-2 border-1 rounded-3 @if($message->user->id == auth()->id()) float-end bg-info @endif">
                                     <div>
                                         <h5 class="mb-1 d-inline-block">{{ $message->user->name }}</h5>
                                         <small class="text-muted d-inline-block float-end">{{ $message->created_at }}</small>
@@ -18,6 +18,11 @@
                                     <p class="mb-1">{{ $message->message }}</p>
                                 </div>
                             @endforeach
+                            @if($conversation->messages->last()->sender_id == auth()->id())
+                                <div class="list-group-item w-75 d-inline-block mb-0 border-0 rounded-0 float-end bg-transparent text-end p-0 text-muted fw-bold">
+                                    {{ $seen }}
+                                </div>
+                            @endif
                         </div>
                     </div>
 

@@ -23,6 +23,7 @@ Route::get('/profile/ads', [App\Http\Controllers\UserPanelController::class, 'my
 Route::get('/profile/edit', [App\Http\Controllers\UserPanelController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/update', [App\Http\Controllers\UserPanelController::class, 'update'])->name('profile.update');
 Route::get('/profile', [App\Http\Controllers\UserPanelController::class, 'index'])->name('profile');
+Route::get('/profile/memorised', [\App\Http\Controllers\UserPanelController::class, 'memorised'])->name('profile.memorised');
 
 Route::resource('/comment', 'App\Http\Controllers\CommentController');
 

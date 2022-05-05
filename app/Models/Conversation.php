@@ -10,6 +10,8 @@ class Conversation extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['title'];
+
     public function messages()
     {
         return $this->hasMany(Message::class, 'conversation_id', 'id');

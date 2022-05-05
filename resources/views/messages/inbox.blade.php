@@ -24,7 +24,11 @@
                                             <h5 class="mb-1">{{ $conversation->title }}</h5>
                                             <small class="text-muted">{{ $conversation->created_at }}</small>
                                         </div>
-                                        <p class="mb-1">{{ $conversation->messages->last()->message }}</p>
+                                        <p class="mb-1">
+                                            <b>{{ $conversation->messages->last()->user->name }}:</b>
+                                            {{ $conversation->messages->last()->message }}<br>
+                                            <small class="text-muted">{{ $conversation->updated_at }}</small>
+                                        </p>
                                     </a>
                                 @endforeach
                             </div>
