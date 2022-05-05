@@ -6,6 +6,7 @@ use App\Models\Ad;
 use App\Http\Requests\StoreAdRequest;
 use App\Http\Requests\UpdateAdRequest;
 use App\Models\Manufacturer;
+use App\Models\MemorisedAds;
 use App\Models\Model;
 use App\Models\Type;
 use App\Models\User;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\Color;
 
@@ -99,6 +101,15 @@ class AdController extends Controller
         $data['ad'] = $ad;
         $ad->views = $ad->views + 1;
         $ad->save();
+
+        $memorisedAd = $ad->usersMemorised()->where('user_id', Auth::id())->count();
+
+        if($memorisedAd) {
+            $data['memorised'] = true;
+        } else {
+            $data['memorised'] = false;
+        }
+
         $data['comments'] = $ad->comments()->orderByDesc('id')->paginate(5);
         return view('ads.single', $data);
     }
@@ -131,6 +142,8 @@ class AdController extends Controller
      */
     public function update(UpdateAdRequest $request, Ad $ad)
     {
+        $oldPrice = Ad::find($ad->id)->price;
+
         $ad->title = $request->post('title');
         $ad->content = $request->post('content');
         $ad->year = $request->post('year');
@@ -144,6 +157,19 @@ class AdController extends Controller
 
         $ad->save();
 
+        if($ad->price != $oldPrice) {
+            $usersMemorised = $ad->usersMemorised;
+
+            foreach ($usersMemorised as $memorised) {
+                $user = $memorised->user;
+                Mail::send('email.price-changed', ['ad' => $ad], function ($m) use ($user) {
+                    $m->from('no-reply@skelbimuportalas.lt', 'Manto skelbimu portalas');
+
+                    $m->to($user->email, $user->name)->subject('Tavo isiminto skelbimo kaina pasikeite!');
+                });
+            }
+        }
+
         return redirect()->route('ad.show', [$ad]);
     }
 
@@ -156,6 +182,24 @@ class AdController extends Controller
     public function destroy(Ad $ad)
     {
         $ad->delete();
+        return redirect()->back();
+    }
+
+    public function memorise($ad_id)
+    {
+        Ad::findOrFail($ad_id);
+
+        $memorised = MemorisedAds::where('ad_id', $ad_id)->where('user_id', Auth::id())->first();
+
+        if($memorised) {
+            echo $memorised->delete();
+        } else {
+            $newMemorised = new MemorisedAds();
+            $newMemorised->ad_id = $ad_id;
+            $newMemorised->user_id = Auth::id();
+            $newMemorised->save();
+        }
+
         return redirect()->back();
     }
 }

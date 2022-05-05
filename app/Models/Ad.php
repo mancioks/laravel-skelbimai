@@ -29,4 +29,9 @@ class Ad extends Model
     {
         return $this->hasMany(Comment::class, 'ad_id', 'id');
     }
+
+    public function usersMemorised()
+    {
+        return $this->hasMany(MemorisedAds::class, 'ad_id', 'id');
+    }
 }

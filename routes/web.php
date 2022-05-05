@@ -34,5 +34,7 @@ Route::get('/inbox/conversation/{conversation_id}', [\App\Http\Controllers\Messa
 
 Auth::routes();
 Route::resource('/ad', 'App\Http\Controllers\AdController');
+Route::get('/ad/memorise/{ad_id}', [\App\Http\Controllers\AdController::class, 'memorise'])->name('ad.memorise');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/ajax/models/{id}', [\App\Http\Controllers\Ajax\Models::class, 'getByManufacturerId'])->name('ajax.models');

@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ad::class, 'user_id', 'id');
     }
+
+    public function memorisedAds()
+    {
+        return $this->hasMany(MemorisedAds::class, 'user_id', 'id');
+    }
 }

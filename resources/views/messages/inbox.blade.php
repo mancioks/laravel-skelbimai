@@ -13,7 +13,13 @@
                             <h5 class="card-title">Conversations</h5>
                             <div class="list-group">
                                 @foreach($conversations as $conversation)
-                                    <a href="{{ route('messages.show-conversation', $conversation->id) }}" class="list-group-item flex-column align-items-start mb-2 border-1 rounded-3">
+                                    <a href="{{ route('messages.show-conversation', $conversation->id) }}"
+                                       class="list-group-item
+                                              flex-column
+                                              align-items-start
+                                              mb-2 border-1
+                                              rounded-3
+                                              @if($conversation->hasUnread()) border-warning bg-warning bg-opacity-25 @endif">
                                         <div class="d-flex w-100 justify-content-between">
                                             <h5 class="mb-1">{{ $conversation->title }}</h5>
                                             <small class="text-muted">{{ $conversation->created_at }}</small>
